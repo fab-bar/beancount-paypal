@@ -93,6 +93,7 @@ class PaypalImporter(importer.ImporterProtocol):
                         postings=[],
                     )
 
+                row['txn_type'] = row['txn_type'].strip()
                 if self.language.txn_from_checking(row['txn_type']):
                     txn.postings.append(
                         data.Posting(
