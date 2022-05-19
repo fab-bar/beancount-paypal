@@ -28,7 +28,8 @@ class PaypalImporter(importer.ImporterProtocol):
         checking_account,
         commission_account,
         language=None,
-        metadata_map=None
+        metadata_map=None,
+        merge_transactions=True
     ):
         if language is None:
             language = lang.en()
@@ -42,6 +43,7 @@ class PaypalImporter(importer.ImporterProtocol):
         self.commission_account = commission_account
         self.language = language
         self.metadata_map = metadata_map
+        self.merge_transactions = merge_transactions
 
     def file_account(self, _):
         return self.account
@@ -79,7 +81,7 @@ class PaypalImporter(importer.ImporterProtocol):
                 row['fee'] = self.language.decimal(row['fee'])
                 row['net'] = self.language.decimal(row['net'])
 
-                if row['reference_txn_id'] != last_txn_id:
+                if (not self.merge_transactions) or row['reference_txn_id'] != last_txn_id:
                     meta = data.new_metadata(filename.name, index, metadata)
 
                     txn = data.Transaction(
@@ -154,7 +156,7 @@ class PaypalImporter(importer.ImporterProtocol):
                         )
                     )
 
-                if row['reference_txn_id'] != last_txn_id:
+                if (not self.merge_transactions) or row['reference_txn_id'] != last_txn_id:
                     entries.append(txn)
                     last_txn_id = row['txn_id']
 
