@@ -62,7 +62,7 @@ class PaypalImporter(importer.ImporterProtocol):
                 return False
 
 
-    def extract(self, filename):
+    def extract(self, filename, existing_entries=None):
         entries = []
         last_txn_id = None
         last_net = None
