@@ -137,10 +137,15 @@ class PaypalImporter(importer.ImporterProtocol):
                         last_was_currency = True
 
                 else:
+
+                    money_amount = D(row['gross'])
+                    if D(row['fee']) < 0:
+                        money_amount += D(row['fee'])
+
                     txn.postings.append(
                         data.Posting(
                             self.account,
-                            amount.Amount(D(row['gross']), row['currency']),
+                            amount.Amount(money_amount, row['currency']),
                             None, None, None, None
                         )
                     )
