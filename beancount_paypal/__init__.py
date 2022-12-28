@@ -52,7 +52,7 @@ class PaypalImporter(importer.ImporterProtocol):
         with csv_open(filename.name) as rows:
             try:
                 row = next(rows)
-                if not self.language.identify(list(next(rows).keys())):
+                if not self.language.identify(list(row.keys())):
                     return False
 
                 row = self.language.normalize_keys(row)
